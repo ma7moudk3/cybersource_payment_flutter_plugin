@@ -36,7 +36,23 @@ interface CaptureContextEvent {
     The sessions API is to be invoked to establish the authentication of the merchants and to set the context of the information that is to be captured.  The response to the sessions rest call is a JWT data object that contains the one-time keys used for point to point encryption.
     Samples of how to generate the capture context server side can be found on the Cybersource git-hub repository
 */
-class CaptureContextHelper {
+class CaptureContextHelper(
+    merchantId:String,
+    merchantKey:String,
+    merchantSecret:String,
+    environment: Environment
+) {
+
+    private val MERCHANT_ID: String
+    private val MERCHANT_KEY: String
+    private val MERCHANT_SECRET:String
+    private val ENV:Environment
+    init {
+        MERCHANT_ID = merchantId
+        MERCHANT_KEY = merchantKey
+        MERCHANT_SECRET = merchantSecret
+        ENV = environment
+    }
 
     /*
         WARNING: Cybersource API credentials are included for demonstration purposes only!
@@ -44,14 +60,12 @@ class CaptureContextHelper {
         and to provide a encapsulated demo.  The Credentials must be removed for the final application build.
      */
     companion object {
-        val MERCHANT_ID = "codepress_test"
-        val MERCHANT_KEY = "9d81e9d5-5888-449f-971b-a33e0f6e189e"
-        val MERCHANT_SECRET = "8qZrYuXYEjcmPTwVuOMVQvxYEbz7kc1pSm9xwBYy1Ds="
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun createCaptureContext(callback: CaptureContextEvent) {
-        val service = FlexSessionServiceGenerator().getRetrofirApiService(Environment.SANDBOX)
+        val service = FlexSessionServiceGenerator().getRetrofirApiService(ENV)
 
         var cardData = FlexCardData(
             FlexFieldData(true), //card number

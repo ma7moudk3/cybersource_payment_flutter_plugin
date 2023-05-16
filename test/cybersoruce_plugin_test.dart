@@ -10,6 +10,11 @@ class MockCybersorucePluginPlatform
 
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<String?> tokenize({required String cardNumber, required String cardExpMonth, required String cardExpYear, required String cardCVV, required String merchantKey, required String merchantId, required String merchantSecret, required Environment environment}) {
+    throw UnimplementedError();
+  }
 }
 
 void main() {

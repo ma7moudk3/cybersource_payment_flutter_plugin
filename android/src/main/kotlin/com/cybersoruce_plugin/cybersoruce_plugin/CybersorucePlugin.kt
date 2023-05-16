@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
+import com.cybersoruce_plugin.cybersoruce_plugin.sessions.api.Environment
 import com.cybersource.flex.android.CaptureContext.fromJwt
 import com.cybersource.flex.android.FlexException
 import com.cybersource.flex.android.FlexService
@@ -29,7 +30,12 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
     private var year: String? = null
     private var cvv: String? = null
     private var keyId: String? = null
-    private var jsonObject: JSONObject? = null;
+    private var merchantId: String? = null
+    private var merchantKey: String? = null
+    private var merchantSecret: String? = null
+    private var environment: String? = null
+    private var jsonObject: JSONObject? = null
+    private var env: Environment? = null
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "cybersoruce_plugin")
@@ -45,12 +51,24 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
             month = call.argument("month")
             year = call.argument("year")
             cvv = call.argument("cvv")
+            merchantId = call.argument("merchantId")
+            merchantKey = call.argument("merchantKey")
+            merchantSecret = call.argument("merchantSecret")
+            environment = call.argument("environment")
+            env = if (environment.equals("production")) {
+                Environment.PRODUCTION
+            } else {
+                Environment.SANDBOX
+            }
             Log.v("cardNumber", cardNumber.toString())
             Log.v("month", month.toString())
             Log.v("year", year.toString())
-            Log.v("cvv",cvv.toString())
+            Log.v("cvv", cvv.toString())
+            Log.v("merchantId", merchantId.toString())
+            Log.v("merchantKey", merchantKey.toString())
+            Log.v("merchantSecret", merchantSecret.toString())
             requestCaptureContext(result)
-         // result.success(jsonObject)
+            // result.success(jsonObject)
 
         } else {
             result.notImplemented()
@@ -76,15 +94,23 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
         return sad
     }
 
-    private fun requestCaptureContext(result: Result) {
+    private fun requestCaptureContext(
+        result: Result,
+
+        ) {
 
         /*  WARNING:
             Before creating TransientToken make sure you have a valid capture context.
             And below creation of capture context code is for demonstration purpose only.
         */
-        CaptureContextHelper().createCaptureContext(object : CaptureContextEvent {
+        CaptureContextHelper(
+            merchantId!!,
+            merchantKey!!,
+            merchantSecret!!,
+            env!!
+        ).createCaptureContext(object : CaptureContextEvent {
             override fun onCaptureContextError(e: Exception) {
-                Log.e("onCaptureContextError",e.toString())
+                Log.e("onCaptureContextError", e.toString())
             }
 
             override fun onCaptureContextResponse(cc: String) {
@@ -128,8 +154,8 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                                     "iat",
                                     tokenResponse.jwtClaims.getValue("iat")
                                 )
-                                
-                                
+
+
                                 jsonObject = json;
                                 Log.v("json", jsonObject.toString())
                                 result.success(jsonObject.toString())
@@ -142,7 +168,7 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                         }
                     })
                 } catch (e: FlexException) {
-                    Log.v("tt",e.toString())
+                    Log.v("tt", e.toString())
                 }
                 print(cc)
             }

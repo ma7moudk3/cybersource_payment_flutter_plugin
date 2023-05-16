@@ -1,4 +1,3 @@
-
 import 'cybersoruce_plugin_platform_interface.dart';
 
 class CybersorucePlugin {
@@ -6,17 +5,25 @@ class CybersorucePlugin {
     return CybersorucePluginPlatform.instance.getPlatformVersion();
   }
 
-  Future<String?> tokenize({
-    required String cardNumber,
-    required String cardExpMonth,
-    required String cardExpYear,
-    required String cardCVV,
-  }) {
+  Future<String?> tokenize(
+      {required String cardNumber,
+      required String cardExpMonth,
+      required String cardExpYear,
+      required String cardCVV,
+      required String merchantKey,
+      required String merchantId,
+      required String merchantSecret,
+      required Environment environment}) {
     return CybersorucePluginPlatform.instance.tokenize(
-      cardNumber: cardNumber,
-      cardExpMonth: cardExpMonth,
-      cardExpYear: cardExpYear,
-      cardCVV: cardCVV,
-    );
+        cardNumber: cardNumber,
+        cardExpMonth: cardExpMonth,
+        cardExpYear: cardExpYear,
+        cardCVV: cardCVV,
+        environment: environment,
+        merchantId: merchantId,
+        merchantKey: merchantKey,
+        merchantSecret: merchantSecret);
   }
 }
+
+enum Environment { production, sandbox }
