@@ -28,16 +28,15 @@ abstract class CybersorucePluginPlatform extends PlatformInterface {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
 
-  Future<String?> tokenize({
-    required String cardNumber,
-    required String cardExpMonth,
-    required String cardExpYear,
-    required String cardCVV,
-    required String merchantKey,
-    required String merchantId,
-    required String merchantSecret,
-    required Environment environment
-  }) {
+  Future<String?> tokenize(
+      {required String cardNumber,
+      required String cardExpMonth,
+      required String cardExpYear,
+      required String cardCVV,
+      required String merchantKey,
+      required String merchantId,
+      required String merchantSecret,
+      required Environment environment}) {
     throw UnimplementedError('tokenize() has not been implemented.');
   }
 }
