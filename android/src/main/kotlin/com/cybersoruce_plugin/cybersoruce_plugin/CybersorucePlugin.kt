@@ -104,11 +104,17 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
             And below creation of capture context code is for demonstration purpose only.
         */
         CaptureContextHelper(merchantId!!, merchantKey!!,merchantSecret!!,env!!).createCaptureContext(object : CaptureContextEvent {
+            
+            override fun onCaptureContextError(e: Exception) {
+                Log.e("onCaptureContextError", e.toString())
+                result.error("onCaptureContextError", e.toString(), e)
+            }
+            
             override fun onCaptureContextResponse(cc: String) {
                 keyId = cc
                 Log.v("CC", cc)
                 val flexService = FlexService.getInstance()
-                    // try {
+                    try {
                         val payloadItems = getPayloadData()
                         val cc1 = fromJwt(keyId)
     
@@ -158,16 +164,11 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                                 }
                             }
                         })
-                    // } catch (e: FlexException) {
-                    //     Log.v("tt", e.toString())
-                    //     result.error("Error", e.toString(), null)
-                    // }
+                    } catch (e: FlexException) {
+                        Log.v("tt", e.toString())
+                        result.error("Error", e.toString(), null)
+                    }
                 print(cc)
-            }
-
-            override fun onCaptureContextError(e: Exception) {
-                Log.e("onCaptureContextError", e.toString())
-                result.error("onCaptureContextError", e.toString(), e)
             }
         })
     }
