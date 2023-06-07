@@ -164,13 +164,11 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                         }
 
                         override fun onFailure(error: FlexException?) {
-                            Log.v("tt", error.toString())
-                            result.success(error.toString())
+
                         }
                     })
                 } catch (e: FlexException) {
                     Log.v("tt", e.toString())
-                    result.success(e.toString())
                 }
                 print(cc)
             }
