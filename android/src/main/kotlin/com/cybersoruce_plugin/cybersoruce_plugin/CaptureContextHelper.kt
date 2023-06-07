@@ -102,7 +102,6 @@ class CaptureContextHelper(
                 )
                 withContext(Dispatchers.Main) {
                     if (keyGenerationResponse!!.isSuccessful) {
-                        Log.e("CaptureContextHelper", "createCaptureContext: $it")
                         keyGenerationResponse!!.body()?.let {
                             callback.onCaptureContextResponse(it)
                         }
