@@ -111,9 +111,7 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
         ).createCaptureContext(object : CaptureContextEvent {
             override fun onCaptureContextError(e: Exception) {
                 Log.e("onCaptureContextError", e.toString())
-                Log.d("onCaptureContextError", e.toString())
-                Log.i("onCaptureContextError", e.toString())
-                Log.v("onCaptureContextError", e.toString())
+                result.error("onCaptureContextError", e.toString(), null)
             }
 
             override fun onCaptureContextResponse(cc: String) {
@@ -168,6 +166,7 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
     
                             override fun onFailure(error: FlexException?) {
                                 Log.e("onFailure", error.toString())
+                                result.error("Error", error.toString(), null)
                             }
                         })
                     } catch (e: FlexException) {
