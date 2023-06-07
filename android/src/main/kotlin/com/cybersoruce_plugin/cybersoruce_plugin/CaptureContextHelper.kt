@@ -101,17 +101,14 @@ class CaptureContextHelper(
                     getHeaderMapForCaptureContext(merchantConfig)
                 )
                 withContext(Dispatchers.Main) {
-                    keyGenerationResponse!!.body()?.let {
+                    if (keyGenerationResponse!!.isSuccessful) {
                         Log.e("CaptureContextHelper", "createCaptureContext: $it")
-                        callback.onCaptureContextResponse(it)
+                        keyGenerationResponse!!.body()?.let {
+                            callback.onCaptureContextResponse(it)
+                        }
+                    } else {
+                        callback.onCaptureContextError(Exception("Failed to create capture context"))
                     }
-                    // if (keyGenerationResponse!!.isSuccessful) {
-                    //     keyGenerationResponse!!.body()?.let {
-                    //         callback.onCaptureContextResponse(it)
-                    //     }
-                    // } else {
-                    //     callback.onCaptureContextError(Exception("Failed to create capture context"))
-                    // }
                 }
             } catch (e: Exception) {
                 callback.onCaptureContextError(e)
