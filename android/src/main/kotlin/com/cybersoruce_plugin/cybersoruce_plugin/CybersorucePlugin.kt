@@ -114,59 +114,48 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
     
                         flexService.createTokenAsyncTask(cc1, payloadItems, object :
                             TransientTokenCreationCallback {
+                            override fun onFailure(error: FlexException?) {
+                                Log.e("onFailure", error.toString())
+                                result.error("Error", error.toString(), null)
+                            }
+
                             override fun onSuccess(tokenResponse: TransientToken?) {
                                 if (tokenResponse != null) {
                                     Log.v("tt", "Token " + tokenResponse.toString())
                                     var json = JSONObject();
-                                    // Dummy data:
                                     json.put(
                                         "encodedToken",
-                                        "eyJraWQiOiIwNjQ4MjUwMD"
-                                    )
-
+                                        tokenResponse.encoded
+                                    );
                                     json.put(
                                         "jti",
-                                        "1E38OI07NFK0TQC3JISMUB4IKCC030RJBS7ERP780RCQ74CCR85E6460D3016FC2"
+                                        tokenResponse.jwtClaims.getValue("jti")
                                     )
-                                    
-                                    // json.put(
-                                    //     "encodedToken",
-                                    //     tokenResponse.encoded
-                                    // );
-                                    // json.put(
-                                    //     "jti",
-                                    //     tokenResponse.jwtClaims.getValue("jti")
-                                    // )
     
-                                    // //{iss=Flex/08, exp=1684067073, type=api-0.1.0, iat=1684066173, jti=1E38OI07NFK0TQC3JISMUB4IKCC030RJBS7ERP780RCQ74CCR85E6460D3016FC2, content={paymentInformation={card={expirationYear={value=2025}, number={maskedValue=XXXXXXXXXXXX1111, bin=411111}, securityCode={}, expirationMonth={value=12}}}}}
-                                    // json.put(
-                                    //     "iss",
-                                    //     tokenResponse.jwtClaims.getValue("iss")
-                                    // )
-                                    // json.put(
-                                    //     "exp",
-                                    //     tokenResponse.jwtClaims.getValue("exp")
-                                    // )
-                                    // json.put(
-                                    //     "type",
-                                    //     tokenResponse.jwtClaims.getValue("type")
-                                    // )
-                                    // json.put(
-                                    //     "iat",
-                                    //     tokenResponse.jwtClaims.getValue("iat")
-                                    // )
+                                    //{iss=Flex/08, exp=1684067073, type=api-0.1.0, iat=1684066173, jti=1E38OI07NFK0TQC3JISMUB4IKCC030RJBS7ERP780RCQ74CCR85E6460D3016FC2, content={paymentInformation={card={expirationYear={value=2025}, number={maskedValue=XXXXXXXXXXXX1111, bin=411111}, securityCode={}, expirationMonth={value=12}}}}}
+                                    json.put(
+                                        "iss",
+                                        tokenResponse.jwtClaims.getValue("iss")
+                                    )
+                                    json.put(
+                                        "exp",
+                                        tokenResponse.jwtClaims.getValue("exp")
+                                    )
+                                    json.put(
+                                        "type",
+                                        tokenResponse.jwtClaims.getValue("type")
+                                    )
+                                    json.put(
+                                        "iat",
+                                        tokenResponse.jwtClaims.getValue("iat")
+                                    )
     
     
-                                    // jsonObject = json;
-                                    // Log.v("json", jsonObject.toString())
+                                    jsonObject = json;
+                                    Log.v("json", jsonObject.toString())
                                     result.success(jsonObject.toString())
 
                                 }
-                            }
-    
-                            override fun onFailure(error: FlexException?) {
-                                Log.e("onFailure", error.toString())
-                                result.error("Error", error.toString(), null)
                             }
                         })
                     } catch (e: FlexException) {
