@@ -103,15 +103,8 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
             Before creating TransientToken make sure you have a valid capture context.
             And below creation of capture context code is for demonstration purpose only.
         */
-        CaptureContextHelper(
-            merchantId!!,
-            merchantKey!!,
-            merchantSecret!!,
-            env!!
-        ).createCaptureContext(object : CaptureContextEvent {
-
+        CaptureContextHelper(merchantId!!, merchantKey!!,merchantSecret!!,env!!).createCaptureContext(object : CaptureContextEvent {
             override fun onCaptureContextResponse(cc: String) {
-
                 keyId = cc
                 Log.v("CC", cc)
                 val flexService = FlexService.getInstance()
@@ -125,38 +118,49 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                                 if (tokenResponse != null) {
                                     Log.v("tt", "Token " + tokenResponse.toString())
                                     var json = JSONObject();
+                                    // Dummy data:
                                     json.put(
                                         "encodedToken",
-                                        tokenResponse.encoded
-                                    );
+                                        "eyJraWQiOiIwNjQ4MjUwMD"
+                                    )
+
                                     json.put(
                                         "jti",
-                                        tokenResponse.jwtClaims.getValue("jti")
+                                        "1E38OI07NFK0TQC3JISMUB4IKCC030RJBS7ERP780RCQ74CCR85E6460D3016FC2"
                                     )
+                                    
+                                    // json.put(
+                                    //     "encodedToken",
+                                    //     tokenResponse.encoded
+                                    // );
+                                    // json.put(
+                                    //     "jti",
+                                    //     tokenResponse.jwtClaims.getValue("jti")
+                                    // )
     
-                                    //{iss=Flex/08, exp=1684067073, type=api-0.1.0, iat=1684066173, jti=1E38OI07NFK0TQC3JISMUB4IKCC030RJBS7ERP780RCQ74CCR85E6460D3016FC2, content={paymentInformation={card={expirationYear={value=2025}, number={maskedValue=XXXXXXXXXXXX1111, bin=411111}, securityCode={}, expirationMonth={value=12}}}}}
-                                    json.put(
-                                        "iss",
-                                        tokenResponse.jwtClaims.getValue("iss")
-                                    )
-                                    json.put(
-                                        "exp",
-                                        tokenResponse.jwtClaims.getValue("exp")
-                                    )
-                                    json.put(
-                                        "type",
-                                        tokenResponse.jwtClaims.getValue("type")
-                                    )
-                                    json.put(
-                                        "iat",
-                                        tokenResponse.jwtClaims.getValue("iat")
-                                    )
+                                    // //{iss=Flex/08, exp=1684067073, type=api-0.1.0, iat=1684066173, jti=1E38OI07NFK0TQC3JISMUB4IKCC030RJBS7ERP780RCQ74CCR85E6460D3016FC2, content={paymentInformation={card={expirationYear={value=2025}, number={maskedValue=XXXXXXXXXXXX1111, bin=411111}, securityCode={}, expirationMonth={value=12}}}}}
+                                    // json.put(
+                                    //     "iss",
+                                    //     tokenResponse.jwtClaims.getValue("iss")
+                                    // )
+                                    // json.put(
+                                    //     "exp",
+                                    //     tokenResponse.jwtClaims.getValue("exp")
+                                    // )
+                                    // json.put(
+                                    //     "type",
+                                    //     tokenResponse.jwtClaims.getValue("type")
+                                    // )
+                                    // json.put(
+                                    //     "iat",
+                                    //     tokenResponse.jwtClaims.getValue("iat")
+                                    // )
     
     
-                                    jsonObject = json;
-                                    Log.v("json", jsonObject.toString())
+                                    // jsonObject = json;
+                                    // Log.v("json", jsonObject.toString())
                                     result.success(jsonObject.toString())
-    
+
                                 }
                             }
     
@@ -174,7 +178,7 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
 
             override fun onCaptureContextError(e: Exception) {
                 Log.e("onCaptureContextError", e.toString())
-                result.error("onCaptureContextError", e.toString(), null)
+                result.error("onCaptureContextError", e.toString(), e)
             }
         })
     }
