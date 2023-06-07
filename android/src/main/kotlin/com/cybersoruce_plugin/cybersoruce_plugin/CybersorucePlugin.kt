@@ -108,7 +108,7 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                 keyId = cc
                 Log.v("CC", cc)
                 val flexService = FlexService.getInstance()
-                    try {
+                    // try {
                         val payloadItems = getPayloadData()
                         val cc1 = fromJwt(keyId)
     
@@ -158,10 +158,10 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                                 }
                             }
                         })
-                    } catch (e: FlexException) {
-                        Log.v("tt", e.toString())
-                        result.error("Error", e.toString(), null)
-                    }
+                    // } catch (e: FlexException) {
+                    //     Log.v("tt", e.toString())
+                    //     result.error("Error", e.toString(), null)
+                    // }
                 print(cc)
             }
 
