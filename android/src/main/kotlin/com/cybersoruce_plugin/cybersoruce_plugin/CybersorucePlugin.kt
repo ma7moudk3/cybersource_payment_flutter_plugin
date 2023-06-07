@@ -171,6 +171,7 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                         })
                     } catch (e: FlexException) {
                         Log.v("tt", e.toString())
+                        result.error("Error", e.toString(), null)
                     }
                 print(cc)
             }
