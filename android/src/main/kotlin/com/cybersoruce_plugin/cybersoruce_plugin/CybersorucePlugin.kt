@@ -111,6 +111,9 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
         ).createCaptureContext(object : CaptureContextEvent {
             override fun onCaptureContextError(e: Exception) {
                 Log.e("onCaptureContextError", e.toString())
+                Log.d("onCaptureContextError", e.toString())
+                Log.i("onCaptureContextError", e.toString())
+                Log.v("onCaptureContextError", e.toString())
             }
 
             override fun onCaptureContextResponse(cc: String) {
@@ -118,7 +121,6 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                 keyId = cc
                 Log.v("CC", cc)
                 val flexService = FlexService.getInstance()
-                runOnUiThread{
                     try {
                         val payloadItems = getPayloadData()
                         val cc1 = fromJwt(keyId)
@@ -171,7 +173,6 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                     } catch (e: FlexException) {
                         Log.v("tt", e.toString())
                     }
-                }
                 print(cc)
             }
         })
