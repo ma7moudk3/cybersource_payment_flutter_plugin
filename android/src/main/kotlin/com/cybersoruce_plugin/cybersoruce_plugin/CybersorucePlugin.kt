@@ -109,10 +109,6 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
             merchantSecret!!,
             env!!
         ).createCaptureContext(object : CaptureContextEvent {
-            // override fun onCaptureContextError(e: Exception) {
-            //     Log.e("onCaptureContextError", e.toString())
-            //     result.error("onCaptureContextError", e.toString(), null)
-            // }
 
             override fun onCaptureContextResponse(cc: String) {
 
@@ -174,6 +170,11 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
                         result.error("Error", e.toString(), null)
                     }
                 print(cc)
+            }
+
+            override fun onCaptureContextError(e: Exception) {
+                Log.e("onCaptureContextError", e.toString())
+                result.error("onCaptureContextError", e.toString(), null)
             }
         })
     }
