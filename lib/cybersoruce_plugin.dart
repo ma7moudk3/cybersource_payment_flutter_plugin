@@ -13,8 +13,8 @@ class CybersorucePlugin {
       required String merchantKey,
       required String merchantId,
       required String merchantSecret,
-      required Environment environment}) {
-    return CybersorucePluginPlatform.instance.tokenize(
+      required Environment environment}) async {
+    String? token = await CybersorucePluginPlatform.instance.tokenize(
         cardNumber: cardNumber,
         cardExpMonth: cardExpMonth,
         cardExpYear: cardExpYear,
@@ -23,6 +23,7 @@ class CybersorucePlugin {
         merchantId: merchantId,
         merchantKey: merchantKey,
         merchantSecret: merchantSecret);
+    return token;
   }
 }
 

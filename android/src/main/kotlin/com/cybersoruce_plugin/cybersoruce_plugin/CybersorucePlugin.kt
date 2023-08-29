@@ -103,73 +103,71 @@ class CybersorucePlugin : FlutterPlugin, MethodCallHandler {
             Before creating TransientToken make sure you have a valid capture context.
             And below creation of capture context code is for demonstration purpose only.
         */
-        CaptureContextHelper(
-            merchantId!!,
-            merchantKey!!,
-            merchantSecret!!,
-            env!!
-        ).createCaptureContext(object : CaptureContextEvent {
+        CaptureContextHelper(merchantId!!, merchantKey!!,merchantSecret!!,env!!).createCaptureContext(object : CaptureContextEvent {
+            
             override fun onCaptureContextError(e: Exception) {
                 Log.e("onCaptureContextError", e.toString())
+                result.error("onCaptureContextError", e.toString(), e)
             }
-
+            
             override fun onCaptureContextResponse(cc: String) {
-
                 keyId = cc
                 Log.v("CC", cc)
                 val flexService = FlexService.getInstance()
-                try {
-                    val payloadItems = getPayloadData()
-                    val cc1 = fromJwt(keyId)
-
-                    flexService.createTokenAsyncTask(cc1, payloadItems, object :
-                        TransientTokenCreationCallback {
-                        override fun onSuccess(tokenResponse: TransientToken?) {
-                            if (tokenResponse != null) {
-                                Log.v("tt", "Token " + tokenResponse.toString())
-                                var json = JSONObject();
-                                json.put(
-                                    "encodedToken",
-                                    tokenResponse.encoded
-                                );
-                                json.put(
-                                    "jti",
-                                    tokenResponse.jwtClaims.getValue("jti")
-                                )
-
-                                //{iss=Flex/08, exp=1684067073, type=api-0.1.0, iat=1684066173, jti=1E38OI07NFK0TQC3JISMUB4IKCC030RJBS7ERP780RCQ74CCR85E6460D3016FC2, content={paymentInformation={card={expirationYear={value=2025}, number={maskedValue=XXXXXXXXXXXX1111, bin=411111}, securityCode={}, expirationMonth={value=12}}}}}
-                                json.put(
-                                    "iss",
-                                    tokenResponse.jwtClaims.getValue("iss")
-                                )
-                                json.put(
-                                    "exp",
-                                    tokenResponse.jwtClaims.getValue("exp")
-                                )
-                                json.put(
-                                    "type",
-                                    tokenResponse.jwtClaims.getValue("type")
-                                )
-                                json.put(
-                                    "iat",
-                                    tokenResponse.jwtClaims.getValue("iat")
-                                )
-
-
-                                jsonObject = json;
-                                Log.v("json", jsonObject.toString())
-                                result.success(jsonObject.toString())
-
+                    try {
+                        val payloadItems = getPayloadData()
+                        val cc1 = fromJwt(keyId)
+    
+                        flexService.createTokenAsyncTask(cc1, payloadItems, object :
+                            TransientTokenCreationCallback {
+                            override fun onFailure(error: FlexException?) {
+                                Log.e("onFailure", error.toString())
+                                result.error("Error", error.toString(), null)
                             }
-                        }
 
-                        override fun onFailure(error: FlexException?) {
+                            override fun onSuccess(tokenResponse: TransientToken?) {
+                                if (tokenResponse != null) {
+                                    Log.v("tt", "Token " + tokenResponse.toString())
+                                    var json = JSONObject();
+                                    json.put(
+                                        "encodedToken",
+                                        tokenResponse.encoded
+                                    );
+                                    json.put(
+                                        "jti",
+                                        tokenResponse.jwtClaims.getValue("jti")
+                                    )
+    
+                                    //{iss=Flex/08, exp=1684067073, type=api-0.1.0, iat=1684066173, jti=1E38OI07NFK0TQC3JISMUB4IKCC030RJBS7ERP780RCQ74CCR85E6460D3016FC2, content={paymentInformation={card={expirationYear={value=2025}, number={maskedValue=XXXXXXXXXXXX1111, bin=411111}, securityCode={}, expirationMonth={value=12}}}}}
+                                    json.put(
+                                        "iss",
+                                        tokenResponse.jwtClaims.getValue("iss")
+                                    )
+                                    json.put(
+                                        "exp",
+                                        tokenResponse.jwtClaims.getValue("exp")
+                                    )
+                                    json.put(
+                                        "type",
+                                        tokenResponse.jwtClaims.getValue("type")
+                                    )
+                                    json.put(
+                                        "iat",
+                                        tokenResponse.jwtClaims.getValue("iat")
+                                    )
+    
+    
+                                    jsonObject = json;
+                                    Log.v("json", jsonObject.toString())
+                                    result.success(jsonObject.toString())
 
-                        }
-                    })
-                } catch (e: FlexException) {
-                    Log.v("tt", e.toString())
-                }
+                                }
+                            }
+                        })
+                    } catch (e: FlexException) {
+                        Log.v("tt", e.toString())
+                        result.error("Error", e.toString(), null)
+                    }
                 print(cc)
             }
         })
