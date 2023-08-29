@@ -21,8 +21,8 @@ class FlexSessionServiceGenerator {
 
         var baseURL: String = ""
         baseURL = when(environment) {
-            Environment.SANDBOX -> "https://testflex.cybersource.com"
-            Environment.PRODUCTION -> "https://flex.cybersource.com"
+            Environment.SANDBOX -> "https://apitest.cybersource.com"
+            Environment.PRODUCTION -> "https://api.cybersource.com"
         }
 
         val retrofit = Retrofit.Builder()
