@@ -25,6 +25,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
+    namespace 'com.cybersoruce_plugin.cybersoruce_plugin'
     compileSdkVersion 29
 
     compileOptions {
